@@ -41,13 +41,29 @@ def find_squares(close):
     image_area = height*width
     min_area = int(image_area*(1/50))
     max_area = int(image_area*(1/5)) 
-    image_number = 0
+    squares = []
     for c in cnts:
         area = cv2.contourArea(c)
         if area > min_area and area < max_area:
             x,y,w,h = cv2.boundingRect(c)
-            cv2.rectangle(image, (int(x + .2*w), int(y + .2*h)), (int(x + .8*w), int(y + .8*h)), (36,255,12), 2)
-            image_number += 1
+            square = {
+                "topl": (int(x + .2*w), int(y + .2*h)),
+                "botr": (int(x + .8*w), int(y + .8*h)) 
+            }
+            squares.append(square)
+    return squares
+
+def draw_squares(image, squares):
+    for square in squares:
+        cv2.rectangle(image, square["topl"], square["botr"], (36,255,12), 2)
     return image
-cv2.imshow('image', find_squares(blur_sharpen(image)))
+
+# prep image
+prepped_image = blur_sharpen(image)
+
+#identify interesting square regions
+squares = find_squares(prepped_image)
+
+#draw squares arround areas of interest on image and display
+cv2.imshow('image', draw_squares(image, squares))
 cv2.waitKey(0)
