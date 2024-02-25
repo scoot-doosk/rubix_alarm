@@ -4,20 +4,25 @@ import cv2
 #open camera
 cap = cv2.VideoCapture(2)
 
-#pull frame on q press
-rubix.vid2still(cap)
+#start alarm
 
-# path
-path = r'./still.png'
 
-#Reading an image in default mode
-image = cv2.imread(path)
+solved = False
+while(not solved):
+    #wait for button press
 
-# prep image
-prepped_image = rubix.blur_sharpen(image)
+    #Check if solved
+    #loop through faces
+    face_cnt = 0
+    for i in range(0,3):
+        #get still of face
+        rubix.vid2still(cap)
 
-#identify interesting square regions
-squares = rubix.find_squares(prepped_image)
+        #Check face
+        if not rubix.checkFace():
+            break
 
-for square in squares:
-    print(rubix.name_color(rubix.get_square_color(image, square)))
+        #rotate platter 90 degrees
+    solved = True
+
+#Play affirmation
