@@ -57,12 +57,8 @@ def get_square_color(image, square):
     average_color = cv2.mean(image[square["topl"][1]:square["botr"][1],square["topl"][0]:square["botr"][0]])
     return average_color
 
-
-cap = cv2.VideoCapture(2)
-
-
 #Display camera and wait for y to capture
-def vid2still():
+def vid2still(cap):
     if not cap.isOpened():
         print("Cannot open camera")
         exit()
@@ -113,21 +109,3 @@ def name_color(bgr_color):
     else:
         color = "RED"
     return color
-
-vid2still()
-
-# path
-path = r'./still.png'
-
-#Reading an image in default mode
-image = cv2.imread(path)
-
-# prep image
-prepped_image = blur_sharpen(image)
-
-#identify interesting square regions
-squares = find_squares(prepped_image)
-
-for square in squares:
-    print(name_color(get_square_color(image, square)))
-
